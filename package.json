@@ -17,6 +17,9 @@
     "flow": "flow"
   },
   "devDependencies": {
-    "flow-bin": "^0.74.0"
+    "eslint": "^5.0.0",
+    "eslint-plugin-react": "^7.10.0",
+    "flow-bin": "^0.74.0",
+    "prettier": "^1.13.5"
   }
 }

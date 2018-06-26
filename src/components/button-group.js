@@ -5,8 +5,8 @@ import styled from 'styled-components'
 
 type Props = {
   values: string[],
-  onChange: string => any,
-  deafaultSelected: string
+  deafaultSelected: string,
+  onChange?: string => any,
 }
 
 type State = {
@@ -23,7 +23,9 @@ export class ButtonGroup extends React.Component<Props, State> {
 
   onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({ selected: e.target.value })
-    this.props.onChange(e.target.value)
+    if (this.props.onChange) {
+      this.props.onChange(e.target.value)
+    }
   }
 
   render() {
@@ -31,7 +33,7 @@ export class ButtonGroup extends React.Component<Props, State> {
       <div>
         <form onChange={this.onChange}>
           {this.props.values.map(el => (
-            <Label selected={this.state.selected === el} key={el}>
+            <Label onKeyDown={this.onKeyDown} tabIndex={0} selected={this.state.selected === el} key={el}>
               <LabelInner>
                 <RadioInput name="random" type="radio" value={el} />
                 <LabelText selected={this.state.selected === el}>
@@ -49,6 +51,7 @@ export class ButtonGroup extends React.Component<Props, State> {
 const Label = styled.label`
   cursor: pointer;
   padding: 9px 20px;
+  position: relative;
   height: 40px;
   border: ${props =>
     props.selected ? '1px solid #2196f3' : '1px solid #d2d5d6'};
@@ -81,8 +84,9 @@ const LabelText = styled.span`
 `
 
 const RadioInput = styled.input`
-  width: 0px;
-  height: 0px;
-  display: none;
+  width: 100%;
+  height: 100%;
+  position: absolute;
   opacity: 0;
+  cursor: pointer;
 `
