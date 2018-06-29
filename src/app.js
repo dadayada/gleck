@@ -6,6 +6,7 @@ import { Flex, Box } from 'grid-styled'
 import { Card } from './components/card'
 import { Ticket } from './components/ticket'
 import { ButtonGroup } from './components/button-group'
+import { CheckboxGroup } from './components/checkbox-group'
 
 const globalStyles = `
 html, body {
@@ -54,6 +55,8 @@ class App extends Component<void> {
                   values={['RUB', 'USD', 'EUR']}
                   deafaultSelected="RUB"
                 />
+                <FilterLabel>хуита</FilterLabel>
+                <CheckboxGroup />
               </Box>
             </Card>
           </Box>

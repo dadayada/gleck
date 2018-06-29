@@ -8,16 +8,31 @@ type Props = {
   label: string
 }
 
-export const Field = (props: Props) => (
-  <Wrapper>
-    <Label>
-      <CheckboxWrapper>
-        <Checkbox />
-      </CheckboxWrapper>
-      {props.label}
-    </Label>
-  </Wrapper>
-)
+type State = {
+  focused: boolean
+}
+
+export class Field extends React.Component<Props, State> {
+  state = {
+    focused: false
+  }
+
+  render() {
+    return (
+      <Wrapper focused={this.state.focused}>
+        <Label>
+          <CheckboxWrapper>
+            <Checkbox
+              onFocus={() => this.setState({ focused: true })}
+              onBlur={() => this.setState({ focused: false })}
+            />
+          </CheckboxWrapper>
+          {this.props.label}
+        </Label>
+      </Wrapper>
+    )
+  }
+}
 
 const Wrapper = styled.div`
   width: 100%;
@@ -26,7 +41,8 @@ const Wrapper = styled.div`
   align-items: center;
   &:hover {
     background-color: #f2fcff;
-  }
+  };
+  background-color: ${props => props.focused ? '#f2fcff' : 'initial'};
 `
 
 const Label = styled.label`

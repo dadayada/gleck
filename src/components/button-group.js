@@ -33,7 +33,7 @@ export class ButtonGroup extends React.Component<Props, State> {
       <div>
         <form onChange={this.onChange}>
           {this.props.values.map(el => (
-            <Label onKeyDown={this.onKeyDown} tabIndex={0} selected={this.state.selected === el} key={el}>
+            <Label selected={this.state.selected === el} key={el}>
               <LabelInner>
                 <RadioInput name="random" type="radio" value={el} />
                 <LabelText selected={this.state.selected === el}>

@@ -5,7 +5,9 @@ import styled from 'styled-components'
 import Check from './check.png'
 
 type Props = {
-  onChange: boolean => void
+  onChange: boolean => void,
+  onFocus?: Function,
+  onBlur?: Function
 }
 
 type State = {
@@ -19,12 +21,20 @@ export class Checkbox extends React.Component<Props, State> {
 
   onChange = (e: SyntheticInputEvent<HTMLInputElement>) => {
     this.setState({ checked: e.target.checked })
+    if (this.props.onChange) {
+      this.props.onChange(e.target.checked)
+    }
   }
 
   render() {
     return (
       <Wrapper checked={this.state.checked}>
-        <Input type="checkbox" onChange={this.onChange} />
+        <Input
+          type="checkbox"
+          onChange={this.onChange}
+          onFocus={this.props.onFocus}
+          onBlur={this.props.onBlur}
+        />
       </Wrapper>
     )
   }
@@ -38,7 +48,7 @@ const Wrapper = styled.span`
   cursor: pointer;
   border: 1px solid #d2d5d6;
   background-color: ${props => (props.checked ? '#f2fcff' : '#FFFF')};
-  background-image: ${props => props.checked ? `url(${Check})` : 'none'};
+  background-image: ${props => (props.checked ? `url(${Check})` : 'none')};
   background-repeat: no-repeat;
   background-position: 50% 50%;
   &:hover {
