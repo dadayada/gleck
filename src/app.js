@@ -2,11 +2,13 @@
 
 import React, { Component } from 'react'
 import styled, { injectGlobal } from 'styled-components'
-import { Flex, Box } from 'grid-styled'
+import { Box } from 'grid-styled'
+import { Transition, animated } from 'react-spring'
 import { Card } from './components/card'
 import { Ticket } from './components/ticket'
 import { ButtonGroup } from './components/button-group'
 import { CheckboxGroup } from './components/checkbox-group'
+import { tickets } from './tickets'
 
 const globalStyles = `
 html, body {
@@ -42,47 +44,137 @@ const FilterLabel = styled.label`
   font-weight: 700;
 `
 
-class App extends Component<void> {
+const rubToUsd = (val: number) => val / 62
+const rubToEur = (val: number) => val / 70
+
+export type StopsState = [boolean, boolean, boolean]
+export type Currency = 'RUB' | 'USD' | 'EUR'
+
+type State = {
+  currencyFilter: Currency,
+  stopsFilter: StopsState
+}
+
+class App extends Component<void, State> {
+  state = {
+    currencyFilter: 'RUB',
+    stopsFilter: [false, false, false]
+  }
+
+  clearStopsFilter = () => {
+    // [ 1 stop, 2 stops, 3 stops ]
+    this.setState({ stopsFilter: [false, false, false] })
+  }
+
+  setStopsFilter = (stops: number, value: boolean, only: boolean) => {
+    const { stopsFilter } = this.state
+    let newState = [...stopsFilter]
+    if (only) {
+      switch (stops) {
+        case 1:
+          newState = [value, false, false]
+          break
+        case 2:
+          newState = [false, value, false]
+          break
+        case 3:
+          newState = [false, false, value]
+          break
+      }
+    } else {
+      switch (stops) {
+        case 1:
+          newState[0] = value
+          break
+        case 2:
+          newState[1] = value
+          break
+        case 3:
+          newState[2] = value
+          break
+      }
+    }
+    this.setState({ stopsFilter: newState })
+  }
+
+  onCurrencyChange = (currency: string) => {
+    this.setState({ currencyFilter: currency })
+  }
+
   render() {
+    const { stopsFilter, currencyFilter } = this.state
+
+    const filteredTickets = tickets
+      .filter(
+        el =>
+          (el.stops === 1 && stopsFilter[0]) ||
+          (el.stops === 2 && stopsFilter[1]) ||
+          (el.stops === 3 && stopsFilter[2])
+      )
+      .map(el => {
+        if (currencyFilter === 'EUR') {
+          return { ...el, price: Math.ceil(rubToEur(el.price)) }
+        }
+        if (currencyFilter === 'USD') {
+          return { ...el, price: Math.ceil(rubToUsd(el.price)) }
+        }
+        return el
+      })
+
     return (
       <div className="App">
         <Container>
-          <Box w={1 / 4} my={10} mx={10}>
-            <Card>
-              <Box p={10}>
-                <FilterLabel>валюта</FilterLabel>
-                <ButtonGroup
-                  values={['RUB', 'USD', 'EUR']}
-                  deafaultSelected="RUB"
-                />
-                <FilterLabel>хуита</FilterLabel>
-                <CheckboxGroup />
-              </Box>
-            </Card>
-          </Box>
-          <Box w={3 / 4}>
-            <Box my={10}>
-              <Ticket
-                flight={{
-                  origin: 'VVO',
-                  origin_name: 'Владивосток',
-                  destination: 'TLV',
-                  destination_name: 'Тель-Авив',
-                  departure_date: '12.05.18',
-                  departure_time: '17:00',
-                  arrival_date: '12.05.18',
-                  arrival_time: '23:30',
-                  carrier: 'TK',
-                  stops: 2,
-                  price: 11000
-                }}
-              />
+          <ResponsiveFilters>
+            <Box flex="initital 0" my={10} mx={10}>
+              <Card>
+                <Box p={10}>
+                  <FilterLabel>валюта</FilterLabel>
+                  <Box m={10}>
+                    <ButtonGroup
+                      values={['RUB', 'USD', 'EUR']}
+                      deafaultSelected="RUB"
+                      onChange={this.onCurrencyChange}
+                    />
+                  </Box>
+                  <FilterLabel>количество пересадок</FilterLabel>
+                  <Box m={10}>
+                    <CheckboxGroup onChange={this.setStopsFilter} />
+                  </Box>
+                </Box>
+              </Card>
             </Box>
+          </ResponsiveFilters>
+          <Box flex="1">
+            <Transition
+              native
+              keys={filteredTickets.map(el => el.key)}
+              from={{ opacity: 0, height: 0, margin: 0 }}
+              enter={{ opacity: 1, height: 120, marginTop: 10 }}
+              leave={{ opacity: 0, height: 0, marginTop: 0 }}
+            >
+              {filteredTickets.map(ticket => styles => (
+                <animated.div style={styles}>
+                  <Box mr={10}>
+                    <Ticket
+                      flight={ticket}
+                      currency={this.state.currencyFilter}
+                    />
+                  </Box>
+                </animated.div>
+              ))}
+            </Transition>
           </Box>
         </Container>
       </div>
     )
   }
 }
+
+const ResponsiveFilters = styled(Box)`
+  @media (max-width: 862px) {
+    position: fixed;
+    visibility: hidden;
+  }
+`
 
 export default App

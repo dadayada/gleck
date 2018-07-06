@@ -5,8 +5,10 @@ import styled from 'styled-components'
 import { Card } from './card'
 import { Button } from './button'
 import { FlightInfo } from './flight-info'
+import type { Currency } from '../app'
 
 type Props = {
+  currency: Currency,
   flight: {
     origin: 'VVO',
     origin_name: string,
@@ -22,13 +24,26 @@ type Props = {
 }
 
 export class Ticket extends React.Component<Props> {
+
   render() {
+    let currencySymbol
+    switch (this.props.currency) {
+      case 'USD':
+        currencySymbol = '$'
+        break
+      case 'EUR':
+        currencySymbol = '€'
+        break
+      case 'RUB':
+        currencySymbol = '₽'
+        break
+    }
     return (
       <Card>
         <Left>
           <Button>
             <div>Купить</div>
-            <span> за {this.props.flight.price}&#x24;</span>
+            <span> за {this.props.flight.price} {currencySymbol}</span>
           </Button>
         </Left>
         <Right>

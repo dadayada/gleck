@@ -4,13 +4,18 @@ import * as React from 'react'
 import { Box } from 'grid-styled'
 import { Field } from './checkbox-field'
 
-export class CheckboxGroup extends React.Component {
+type Props = {
+  onChange: (stops: number, value: boolean, only: boolean) => any
+}
+
+export class CheckboxGroup extends React.Component<Props> {
+
   render() {
     return (
-      <Box p={10}>
-        <Field label="1 пересадка"/>
-        <Field label="2 пересадки"/>
-        <Field label="3 пересадки"/>
+      <Box>
+        <Field onChange={change => this.props.onChange(1, change, false)} label="1 пересадка"/>
+        <Field onChange={change => this.props.onChange(2, change, false)} label="2 пересадки"/>
+        <Field onChange={change => this.props.onChange(3, change, false)} label="3 пересадки"/>
       </Box>
     )
   }

@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { Checkbox } from './checkbox'
 
 type Props = {
-  label: string
+  label: string,
+  onChange: boolean => any
 }
 
 type State = {
@@ -23,6 +24,7 @@ export class Field extends React.Component<Props, State> {
         <Label>
           <CheckboxWrapper>
             <Checkbox
+              onChange={this.props.onChange}
               onFocus={() => this.setState({ focused: true })}
               onBlur={() => this.setState({ focused: false })}
             />
