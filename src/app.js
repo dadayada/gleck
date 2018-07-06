@@ -3,7 +3,6 @@
 import React, { Component } from 'react'
 import styled, { injectGlobal } from 'styled-components'
 import { Box } from 'grid-styled'
-import { Transition, animated } from 'react-spring'
 import { Card } from './components/card'
 import { Ticket } from './components/ticket'
 import { ButtonGroup } from './components/button-group'
@@ -145,24 +144,13 @@ class App extends Component<void, State> {
             </Box>
           </ResponsiveFilters>
           <Box flex="1">
-            <Transition
-              native
-              keys={filteredTickets.map(el => el.key)}
-              from={{ opacity: 0, height: 0, margin: 0 }}
-              enter={{ opacity: 1, height: 120, marginTop: 10 }}
-              leave={{ opacity: 0, height: 0, marginTop: 0 }}
-            >
-              {filteredTickets.map(ticket => styles => (
-                <animated.div style={styles}>
+              {filteredTickets.map(ticket =>  (
                   <Box mr={10}>
                     <Ticket
                       flight={ticket}
                       currency={this.state.currencyFilter}
                     />
-                  </Box>
-                </animated.div>
-              ))}
-            </Transition>
+                  </Box>))}
           </Box>
         </Container>
       </div>
