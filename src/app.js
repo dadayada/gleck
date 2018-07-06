@@ -144,13 +144,11 @@ class App extends Component<void, State> {
             </Box>
           </ResponsiveFilters>
           <Box flex="1">
-              {filteredTickets.map(ticket =>  (
-                  <Box mr={10}>
-                    <Ticket
-                      flight={ticket}
-                      currency={this.state.currencyFilter}
-                    />
-                  </Box>))}
+            {filteredTickets.map(ticket => (
+              <Box mr={10}>
+                <Ticket flight={ticket} currency={this.state.currencyFilter} />
+              </Box>
+            ))}
           </Box>
         </Container>
       </div>
