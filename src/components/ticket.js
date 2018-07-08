@@ -37,9 +37,10 @@ export class Ticket extends React.Component<Props> {
       case 'RUB':
         currencySymbol = '₽'
         break
+      default: currencySymbol = '₽'
     }
     return (
-      <Card>
+      <CardWrapper>
         <Left>
           <Button>
             <div>Купить</div>
@@ -49,12 +50,21 @@ export class Ticket extends React.Component<Props> {
         <Right>
           <FlightInfo flight={this.props.flight} />
         </Right>
-      </Card>
+      </CardWrapper>
     )
   }
 }
 
+const CardWrapper = styled(Card)`
+  @media (max-width: 620px) {
+    display: block;
+  }
+`
+
 const Left = styled.div`
+  @media (max-width: 620px) {
+    width: 100%;
+  }
   width: 200px;
   border-right: 1px solid #eceff1;
   display: flex;

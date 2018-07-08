@@ -3,11 +3,12 @@ import * as React from 'react'
 import styled from 'styled-components'
 
 type Props = {
-  children: React.Node
+  children: React.Node,
+  className?: string
 }
 
 export const Card = (props: Props) => (
-  <Base>
+  <Base className={props.className}>
     {props.children}
   </Base>
 )

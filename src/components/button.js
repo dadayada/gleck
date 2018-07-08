@@ -4,6 +4,7 @@ import styled from 'styled-components'
 
 export const Button = styled.button`
   width: 160px;
+  transition: background-color 0.5s;
   color: #ffff;
   border: none;
   cursor: pointer;

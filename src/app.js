@@ -79,6 +79,7 @@ class App extends Component<void, State> {
         case 3:
           newState = [false, false, value]
           break
+        default: newState = [false, false, false]
       }
     } else {
       switch (stops) {
@@ -91,6 +92,7 @@ class App extends Component<void, State> {
         case 3:
           newState[2] = value
           break
+        default: newState = [false, false, false]
       }
     }
     this.setState({ stopsFilter: newState })
@@ -145,7 +147,7 @@ class App extends Component<void, State> {
           </ResponsiveFilters>
           <Box flex="1">
             {filteredTickets.map(ticket => (
-              <Box mr={10}>
+              <Box m={10} key={ticket.key}>
                 <Ticket flight={ticket} currency={this.state.currencyFilter} />
               </Box>
             ))}
